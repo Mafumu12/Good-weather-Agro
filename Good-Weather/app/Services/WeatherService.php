@@ -45,7 +45,8 @@ class WeatherService
         {
             $url = $this->baseURL . $this->currentWeather . $this->cityurl . $city . $this->key . $this->apiKey;
             $weather = $this->sendRequest($url);
-            return $weather;
+            $arrayWeather = json_decode($weather);
+            return $arrayWeather;
 
         } catch (\Exception $e) {
 
@@ -64,7 +65,9 @@ class WeatherService
         {
             $url = $this->baseURL . $this->sixteenForecast . $this->cityurl . $city . $this->key . $this->apiKey;
             $forecast = $this->sendRequest($url);
-            return $forecast;
+
+            $arrayForecast = json_decode($forecast);
+            return $arrayForecast;
 
         } catch (\Exception $e) {
 

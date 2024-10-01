@@ -7,11 +7,7 @@
     <div v-if="history.length">
       <h3>Search History:</h3>
       <ul>
-        <li
-          v-for="(item, index) in history"
-          :key="index"
-          @click="selectCity(item)"
-        >
+        <li v-for="(item, index) in history" :key="index" @click="selectCity(item)">
           {{ item }}
         </li>
       </ul>
@@ -34,14 +30,7 @@ const form = useForm({
 const history = ref([]);
 const { props } = usePage();
 
-// Load history from local storage when the component is mounted
-/*
-onMounted(() => {
-  if (localStorage.getItem("searchHistory")) {
-    history.value = JSON.parse(localStorage.getItem("searchHistory"));
-  }
-});
-*/
+
 onMounted(() => {
   if (props.auth.user) {
     // Fetch search history from the database
@@ -79,18 +68,7 @@ function searchCity() {
     },
   });
 }
-/*
-function updateSearchHistory(city) {
-  let searchHistory = history.value;
 
-  searchHistory.push(city);
-  if (searchHistory.length > 5) {
-    searchHistory.shift();
-  }
-
-  localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-  history.value = searchHistory;
-}*/
 
 function updateSearchHistory(city) {
   if (props.auth.user) {

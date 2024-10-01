@@ -5,6 +5,8 @@
   <CurrentWeather :currentWeather="currentWeather" />
   <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
   <FavouriteCities v-if="isAuthenticated" />
+  <SearchHistory />
+
 </template>
 
 
@@ -12,6 +14,7 @@
 import CurrentWeather from "@/Components/weather/CurrentWeather.vue";
 import TwelveDayWeather from "@/Components/weather/TwelveDayWeather.vue";
 import FavouriteCities from "@/Components/weather/FavouriteCities.vue";
+import SearchHistory from "@/Components/weather/SearchHistory.vue";
 import InputForm from "@/Components/weather/InputForm.vue";
 import { usePage } from "@inertiajs/vue3";
 const props = defineProps({

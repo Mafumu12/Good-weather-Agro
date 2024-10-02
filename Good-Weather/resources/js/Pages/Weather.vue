@@ -1,11 +1,18 @@
 <template>
-  <a href="/dashboard">profile</a>
-  <InputForm :errors="errors" />
 
-  <CurrentWeather :currentWeather="currentWeather" />
-  <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
-  <FavouriteCities v-if="isAuthenticated" />
-  <SearchHistory />
+
+  <div class="bg-[#070450] p-2">
+
+    <NavBar />
+ 
+    <InputForm :errors="errors" />
+    <CurrentWeather :currentWeather="currentWeather" />
+    <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
+    <FavouriteCities v-if="isAuthenticated" />
+    <SearchHistory />
+
+  </div>
+
 
 </template>
 
@@ -16,6 +23,8 @@ import TwelveDayWeather from "@/Components/weather/TwelveDayWeather.vue";
 import FavouriteCities from "@/Components/weather/FavouriteCities.vue";
 import SearchHistory from "@/Components/weather/SearchHistory.vue";
 import InputForm from "@/Components/weather/InputForm.vue";
+import NavBar from "@/Components/weather/NavBar.vue";
+ 
 import { usePage } from "@inertiajs/vue3";
 const props = defineProps({
   currentWeather: Object,

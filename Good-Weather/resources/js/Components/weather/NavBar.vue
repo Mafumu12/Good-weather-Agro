@@ -1,6 +1,6 @@
 <template>
     <nav class="  bg-[#080A32] rounded-lg ">
- 
+
 
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
@@ -18,7 +18,7 @@
 
 
             </button>
-          
+
 
             <div :class="{ 'translate-x-0': isMobileNavOpen, '-translate-x-full': !isMobileNavOpen }"
                 class="fixed top-0 left-0 w-full h-full bg-gray-50  transform transition-transform duration-300 ease-in-out"
@@ -57,14 +57,26 @@
                         <a href="/register" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">SignUp</a>
                     </li>
                     <hr>
-                    <li class="flex items-center">
-                        <FaHistory />
-                        <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">Recent Locations
-                        </a>
-                    </li>
+                    <ol>
+                        <div class="flex items-center">
+
+                            <FaHistory />
+                            <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">Recent Locations
+                            </a>
+                        </div>
+                        <hr>
+
+                        <li v-for="(location, index) in history" :key="index">
+                            <span class="ml-6"> {{ location }}</span>
+
+                            <hr>
+                        </li>
+                    </ol>
                     <hr>
-                   
-                
+
+
+
+
 
                 </ul>
             </div>
@@ -86,42 +98,23 @@
 
 <script setup>
 
-import { ref, onMounted  } from 'vue';
+import { ref, onMounted } from 'vue';
 import { FaHistory, FaRegUser, FaSignInAlt } from 'vue3-icons/fa';
-import { usePage } from '@inertiajs/vue3';
- 
 
-
+const props = defineProps({
+    history: Array,
+    isAuthenticated: Boolean,
+});
 const isMobileNavOpen = ref(false);
-const history = ref([]);
-const { props } = usePage();
-
-
 const toggleMobileNav = () => {
     isMobileNavOpen.value = !isMobileNavOpen.value;
 };
 
-const { props: pageProps } = usePage();
-const isAuthenticated = pageProps.auth.user !== null;
 
-onMounted(() => {
-    if (props.auth.user) {
 
-        axios
-            .get("/search-history")
-            .then((response) => {
-                history.value = response.data;
-            })
-            .catch((error) => {
-                console.error("Error fetching search history:", error);
-            });
-    } else {
 
-        if (localStorage.getItem("searchHistory")) {
-            history.value = JSON.parse(localStorage.getItem("searchHistory"));
-        }
-    }
-});
+
+
 </script>
 
 <style scoped>

@@ -1,22 +1,68 @@
 <template>
-  <h1>Current Weather</h1>
-  <div v-if="currentWeather && currentWeather.data">
+
+
+  <div class="block  w-full p-6 bg-[#080A32] mt-2    rounded-lg  ">
+
+
     <div v-for="current in currentWeather.data" :key="current">
-      <p>Temperature:{{ current.temp }}</p>
-      <p>Feels like Temperature:{{ current.app_temp }}</p>
-      <p>Weather description:{{ current.weather.description }}</p>
-      <p>Wind Speed:{{ current.wind_spd }}</p>
-      <p>Humidity:{{ current.rh }}</p>
-      <p>Air Quality:{{ current.aqi }}</p>
-      <p>Country Code:{{ current.country_code }}</p>
-      <p>TimeStamp:{{ current.ob_time }}</p>
-      <p>
-        City:{{ current.city_name }}
-        <a @click="addToFavorites(current.city_name)">*Add To Favorites*</a>
-      </p>
+      <div class="city-country">
+        {{ current.city_name }}, <span>{{ current.country_code }}</span>
+      </div>
+      <div class=" city-country flex justify-between ">
+        <span>Current weather</span>
+        <span>{{ current.ob_time }}</span>
+      </div>
+
+
+      <div class="city-country flex justify-between items-center">
+        <span> {{ current.temp }}</span>
+        <div class="city-country">
+          <p>{{ current.weather.description }}</p>
+          <p>Feels like Temperature {{ current.app_temp }}</p>
+        </div>
+      </div>
+
+      <div class="city-country flex justify-between">
+
+
+        <div>
+          <p>wind</p>
+          <p>{{ current.wind_spd }}</p>
+        </div>
+
+        <div>
+
+          <p>Humidity</p>
+          <p>{{ current.rh }}</p>
+        </div>
+
+
+
+        <div>
+          <p>Air Quality</p>
+          <p>{{ current.aqi }}</p>
+
+        </div>
+
+
+
+      </div>
+
+
+
+
+
+
+      <a @click="addToFavorites(current.city_name)">*Add To Favorites*</a>
+
     </div>
+
+
   </div>
-  <p v-else>No weather data available.</p>
+
+
+
+
 </template>
 
 
@@ -46,3 +92,12 @@ function addToFavorites(cityName) {
     });
 }
 </script>
+
+<style scoped>
+.city-country {
+  font-family: Prompt;
+  font-weight: 300;
+  color: #F5F5F5;
+  font-size: 12px;
+}
+</style>

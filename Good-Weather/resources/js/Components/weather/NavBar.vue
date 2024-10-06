@@ -21,7 +21,7 @@
 
 
             <div :class="{ 'translate-x-0': isMobileNavOpen, '-translate-x-full': !isMobileNavOpen }"
-                class="fixed top-0 left-0 w-full h-full bg-gray-50  transform transition-transform duration-300 ease-in-out"
+                class="fixed top-0 left-0 w-full h-full bg-gray-50  transform transition-transform duration-300 ease-in-out z-50"
                 id="navbar-hamburger">
 
 
@@ -67,7 +67,7 @@
                         <hr>
 
                         <li v-for="(location, index) in history" :key="index">
-                            <span class="ml-6"> {{ location }}</span>
+                            <span class="history ml-6"> {{ location }}</span>
 
                             <hr>
                         </li>
@@ -126,5 +126,10 @@ const toggleMobileNav = () => {
 .Menu-list {
     font-family: Prompt;
     font-weight: 400;
+}
+
+.history {
+    font-family: Prompt;
+    font-weight: 300;
 }
 </style>

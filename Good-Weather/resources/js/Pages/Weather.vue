@@ -1,13 +1,17 @@
 <template>
 
 
-  <div class="bg-[#070450] p-2">
+  <div class="bg-[#102B6D] h-full ">
 
     <NavBar :history="searchHistory" :isAuthenticated="isAuthenticated" />
 
     <InputForm :errors="errors" @update-history="setSearchHistory" />
-    <CurrentWeather :currentWeather="currentWeather" />
-    <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
+    <div class="p-2">
+      <CurrentWeather :currentWeather="currentWeather" />
+      <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
+
+    </div>
+
     <FavouriteCities v-if="isAuthenticated" />
 
 

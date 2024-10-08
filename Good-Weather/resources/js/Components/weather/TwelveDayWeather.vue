@@ -1,6 +1,6 @@
 <template>
 
-  <div class="city-country   w-full   bg-[#080A32] mt-2 rounded-lg">
+  <div class="city-country   w-full   bg-[#0654B0] mt-2 rounded-lg">
 
 
     <div class="flex justify-center items-center gap-4 p-4">
@@ -24,8 +24,8 @@
     <hr>
 
     <div class=" w-full overflow-hidden">
-      
-      
+
+
 
       <div v-for="(chunk, index) in chunkedForecasts" :key="index" v-show="currentSlide === index"
         class="grid grid-cols-4 gap-4">
@@ -34,11 +34,11 @@
 
           <div>
             <img :src="`https://www.weatherbit.io/static/img/icons/${forecast.weather.icon}.png`"
-            :alt="forecast.weather.description" class="weather-icon" />
+              :alt="forecast.weather.description" class="weather-icon" />
 
           </div>
           <div>
-          
+
             <span class="descrip">{{ forecast.weather.description }}</span>
           </div>
           <div class="max-temp">{{ Math.round(forecast.max_temp) }}°C</div>

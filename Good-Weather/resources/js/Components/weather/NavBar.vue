@@ -1,5 +1,5 @@
 <template>
-    <nav class="  bg-[#080A32] rounded-lg ">
+    <nav class="">
 
 
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -7,7 +7,7 @@
 
 
             <button @click="toggleMobileNav" type="button"
-                class="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-[#106D15] rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                class="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-[#E4EFFF] rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
                 aria-controls="navbar-hamburger" :aria-expanded="isMobileNavOpen.toString()">
 
                 <svg v-if="!isMobileNavOpen" class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -66,13 +66,13 @@
                         </div>
                         <hr>
 
-                        <div   v-for="(location, index) in history" :key="index">
+                        <div v-for="(location, index) in history" :key="index">
                             <span class="history ml-6"> {{ location }}</span>
 
                             <hr>
                         </div>
                     </li>
-                     
+
 
 
 
@@ -118,20 +118,10 @@ const toggleMobileNav = () => {
 </script>
 
 <style scoped>
-.Menu {
-     
-     
-}
-
-.Menu-list {
-     
-     
-}
-
 .history {
-     
+
     font-size: 14px;
     font-weight: 400;
-     
+
 }
 </style>

@@ -57,7 +57,7 @@
                         <a href="/register" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">SignUp</a>
                     </li>
                     <hr>
-                    <ol>
+                    <li>
                         <div class="flex items-center">
 
                             <FaHistory />
@@ -66,13 +66,13 @@
                         </div>
                         <hr>
 
-                        <li v-for="(location, index) in history" :key="index">
+                        <div   v-for="(location, index) in history" :key="index">
                             <span class="history ml-6"> {{ location }}</span>
 
                             <hr>
-                        </li>
-                    </ol>
-                    <hr>
+                        </div>
+                    </li>
+                     
 
 
 
@@ -119,17 +119,19 @@ const toggleMobileNav = () => {
 
 <style scoped>
 .Menu {
-    font-family: Prompt;
-    font-weight: 500;
+     
+     
 }
 
 .Menu-list {
-    font-family: Prompt;
-    font-weight: 400;
+     
+     
 }
 
 .history {
-    font-family: Prompt;
-    font-weight: 300;
+     
+    font-size: 14px;
+    font-weight: 400;
+     
 }
 </style>

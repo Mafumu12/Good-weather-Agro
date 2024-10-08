@@ -115,9 +115,16 @@ function selectCity(city) {
 
 <style scoped>
 .hero {
-  font-family: Prompt;
+  
   font-weight: 400;
   color: #F5F5F5;
   font-size: 24px;
 }
+
+.back-up
+{
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
 </style>

@@ -1,14 +1,16 @@
 <template>
-  <div>
-    <h2>Your Favorite Cities</h2>
-    <div v-if="favorites.length > 0">
-      <ul>
-        <li v-for="favorite in favorites" :key="favorite.id">
-          {{ favorite.city }}
-        </li>
-      </ul>
-    </div>
-    <p v-else>You don't have any favorite cities yet.</p>
+  <div v-if="favorites.length > 0" class="block  w-full p-4 bg-[#399EF8] mt-4  shadow   rounded-lg  ">
+    <p class="city-heading">Your Favorite Cities</p>
+     
+        <div  class="flex    " v-for="favorite in favorites" :key="favorite.id">
+
+          
+
+          <div   class="w-1/3 text-white bg-[#6AD2FF] font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2    "> {{ favorite.city }}</div>
+          
+        </div>
+      
+     
   </div>
 </template>
 
@@ -34,3 +36,15 @@ if (props.auth.user) {
   });
 }
 </script>
+
+<style scoped>
+
+.city-heading {
+  font-weight: 500;
+  color: #F5F5F5;
+  font-size: 20px;
+  text-align: center;
+}
+
+
+</style>

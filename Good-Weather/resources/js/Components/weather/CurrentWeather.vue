@@ -1,21 +1,36 @@
 <template>
 
 
-  <div class="block  w-full p-6 bg-[#00A3FF] mt-2    rounded-lg  ">
+  <div class="block  w-full p-4 bg-[#399EF8] mt-4 shadow    rounded-lg  ">
 
 
     <div v-for="current in currentWeather.data" :key="current">
-      <div class=" flex items-center justify-between">
+      <div>
         <p class="city-country">{{ current.city_name }}, <span>{{ current.country_code }}</span></p>
-        <span class="date-time">{{ formatDate(current.ob_time) }}</span>
-      </div>
-      <div class="current-weather-header  ">
-        <span>Current weather</span>
+        <div class=" flex items-center justify-between">
+
+          <Link @click="addToFavorites(current.city_name)" class="flex items-center gap-1">
+            <span class="gold-icon">
+              <FaStar />
+            </span>
+            
+            <p class="favourites" >Add To Favourite Cities</p>
+
+          </Link>
+
+          <span class="date-time">{{ formatDate(current.ob_time) }}</span>
+        </div>
+
 
       </div>
+      <div>
+        <span class="current-weather-header  ">Current weather</span>
 
 
-      <div class=" flex justify-between items-center">
+      </div>
+
+
+      <div class=" flex justify-start items-center gap-4 my-2">
         <img :src="`https://www.weatherbit.io/static/img/icons/${current.weather.icon}.png`"
           :alt="current.weather.description" class="weather-icon" />
         <span class="current-temperature"> {{ Math.round(current.temp) }}<sup class="super-script">°C</sup></span>
@@ -26,7 +41,7 @@
         </div>
       </div>
 
-      <div class="  flex justify-between">
+      <div class="  flex justify-between items-center">
 
 
         <div>
@@ -57,7 +72,7 @@
 
 
 
-      <a @click="addToFavorites(current.city_name)">*Add To Favorites*</a>
+
 
     </div>
 
@@ -71,7 +86,8 @@
 
 
 <script setup>
-import { usePage, router } from "@inertiajs/vue3";
+import { usePage, router, Link } from "@inertiajs/vue3";
+import { FaHistory, FaRegUser, FaSignInAlt, FaStar } from 'vue3-icons/fa';
 import axios from "axios";
 import dayjs from 'dayjs';
 
@@ -100,7 +116,7 @@ function addToFavorites(cityName) {
   // Check if user is authenticated
   if (!pageProps.auth || !pageProps.auth.user) {
     // Redirect to login if not authenticated
-    router.visit("/welcome");
+    router.visit("/login");
     return;
   }
 
@@ -121,7 +137,12 @@ function addToFavorites(cityName) {
 
   font-weight: 700;
   color: #F5F5F5;
-  font-size: 12px;
+  font-size: 16px;
+}
+
+.gold-icon {
+  color: gold;
+  font-size:12px;
 }
 
 .date-time {
@@ -133,23 +154,23 @@ function addToFavorites(cityName) {
 .current-weather-header {
   font-weight: 500;
   color: #F5F5F5;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .current-temperature {
-  font-weight: 700;
+  font-weight: 400;
   color: #F5F5F5;
-  font-size: 36px;
+  font-size: 68px;
 }
 
 .super-script {
-  font-weight: 500;
+  font-weight: 300;
   color: #F5F5F5;
-  font-size: 24px;
+  font-size: 40px;
 }
 
 .weather-description {
-  font-weight: 400;
+  font-weight: 500;
   color: #F5F5F5;
   font-size: 16px;
 
@@ -158,23 +179,31 @@ function addToFavorites(cityName) {
 .feels-like {
   font-weight: 400;
   color: #F5F5F5;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .weather-icon {
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: 80px;
 }
 
 .attributes-heading {
-  font-weight: 300;
+  font-weight: 400;
+  color: #F5F5F5;
+  font-size: 16px;
+}
+
+.values {
+  font-weight: 500;
   color: #F5F5F5;
   font-size: 14px;
 }
 
-.values {
-  font-weight: 400;
+.favourites {
+
+  font-weight: 300;
   color: #F5F5F5;
-  font-size: 14px;
+  font-size: 10px;
+
 }
 </style>

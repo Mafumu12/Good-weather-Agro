@@ -46,6 +46,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('/weather-home', absolute: false));
+        return redirect(route('weather-home', absolute: false));
     }
 }

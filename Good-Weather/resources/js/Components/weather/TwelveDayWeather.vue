@@ -1,9 +1,9 @@
 <template>
 
-  <div class="city-country   w-full   bg-[#0654B0] mt-2 rounded-lg">
+  <div class="city-country p-4  w-full shadow    bg-[#23262E] mt-4 rounded-lg">
 
 
-    <div class="flex justify-center items-center gap-4 p-4">
+    <div class="flex justify-between items-center gap-4 ">
       <button type="button"
         class=" flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
         @click="prevSlide">
@@ -11,7 +11,7 @@
           <FaLessThan />
         </span>
       </button>
-      <h6>16 Day Forecast</h6>
+      <p class="forecast-heading">16 Day Forecast</p>
       <button type="button"
         class="  flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
         @click="nextSlide">
@@ -21,14 +21,16 @@
       </button>
 
     </div>
-    <hr>
 
-    <div class=" w-full overflow-hidden">
+    
+
+
+    <div class=" w-full mt-4 mx-4 overflow-hidden">
 
 
 
       <div v-for="(chunk, index) in chunkedForecasts" :key="index" v-show="currentSlide === index"
-        class="grid grid-cols-4 gap-4">
+        class="grid grid-cols-4 gap-4 ">
         <div v-for="forecast in chunk" :key="forecast.datetime" class="forecast-item">
           <div class="day">{{ formatDate(forecast.datetime) }}</div>
 
@@ -39,11 +41,17 @@
           </div>
           <div>
 
-            <span class="descrip">{{ forecast.weather.description }}</span>
+            <p class="descrip  ">{{ forecast.weather.description }}</p>
           </div>
-          <div class="max-temp">{{ Math.round(forecast.max_temp) }}°C</div>
-          <div class="min-temp">{{ Math.round(forecast.min_temp) }}°C</div>
-          <div class="wind">{{ Math.round(forecast.wind_spd) }}m/s</div>
+          <div>
+            <p class="max-temp">{{ Math.round(forecast.max_temp) }}°C</p>
+          </div>
+          <div>
+            <p class="min-temp">{{ Math.round(forecast.min_temp) }}°C</p>
+          </div>
+          <div>
+            <p class="wind">{{ Math.round(forecast.wind_spd) }}m/s</p>
+          </div>
         </div>
       </div>
 
@@ -98,6 +106,12 @@ function formatDate(datetime) {
 </script>
 
 <style scoped>
+.forecast-heading {
+  font-weight: 500;
+  color: #F5F5F5;
+  font-size: 16px;
+}
+
 .city-country {
   font-weight: 700;
   color: #F5F5F5;
@@ -109,9 +123,7 @@ function formatDate(datetime) {
   height: 40px;
 }
 
-.forecast-item {
-  text-align: center;
-}
+ 
 
 .day {
   font-weight: 400;
@@ -124,6 +136,7 @@ function formatDate(datetime) {
   font-weight: 700;
   color: #F5F5F5;
   font-size: 12px;
+
 
 }
 

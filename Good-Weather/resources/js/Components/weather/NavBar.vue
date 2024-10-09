@@ -7,7 +7,7 @@
 
 
             <button @click="toggleMobileNav" type="button"
-                class="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-[#E4EFFF] rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                class="inline-flex items-center justify-center p-2 w-10 h-10 text-sm text-[#EBE9EB] rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
                 aria-controls="navbar-hamburger" :aria-expanded="isMobileNavOpen.toString()">
 
                 <svg v-if="!isMobileNavOpen" class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -43,11 +43,11 @@
                 </div>
 
 
-                <ul class="Menu-list flex flex-col p-2 font-medium mt-0 rounded-lg bg-gray-50 ">
+                <ul class="Menu-list flex flex-col p-2 font-medium mt-0   ">
 
                     <li v-if="isAuthenticated" class="flex items-center">
                         <FaRegUser />
-                        <a href="/dashboard" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">profile</a>
+                        <a href="/dashboard" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">Profile</a>
                     </li>
 
                     <li v-else class="flex items-center">

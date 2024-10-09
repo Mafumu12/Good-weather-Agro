@@ -8,9 +8,10 @@
     
     <div class="p-4 " >
       <InputForm :errors="errors" @update-history="setSearchHistory" />
+      <FavouriteCities v-if="isAuthenticated" />
       <CurrentWeather :currentWeather="currentWeather" />
       <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
-      <FavouriteCities v-if="isAuthenticated" />
+      
     </div>
 
    

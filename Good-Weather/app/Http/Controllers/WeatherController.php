@@ -11,7 +11,7 @@ class WeatherController extends Controller
 
     public function getCurrentWeather(Request $request)
     {
-        $city = $request->input('city');
+        $city = $request->input('city', 'Lusaka');
         Log::info('City requested:', ['city' => $city]);
         $weather = new WeatherService;
         $currenWeather = $weather->currentWeather($city);

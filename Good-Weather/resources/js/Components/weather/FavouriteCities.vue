@@ -1,10 +1,10 @@
 <template>
   <div v-if="favorites.length > 0">
-    <div class="flex items-center justify-between ">
+    <div class="flex items-center justify-between px-4 mt-4 ">
       <button type="button"
         class="  flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
         @click="prevSlide" :disabled="currentSlide === 0">
-        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/30">
+        <span class=" arrows inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/30">
           <FaLessThan />
         </span>
       </button>
@@ -15,14 +15,16 @@
       <button type="button"
         class="  flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
         @click="nextSlide" :disabled="currentSlide === chunkedCities.length - 1">
-        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/30">
+        <span class="arrows inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/30">
           <FaGreaterThan />
         </span>
       </button>
 
+      
+
     </div>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-2 gap-4 mt-4">
 
 
 
@@ -97,7 +99,12 @@ const prevSlide = () => {
 .city-heading {
   font-weight: 500;
   color: #F5F5F5;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
+}
+.arrows
+{
+  color:#EBE9EB;
+  font-size:12px ;
 }
 </style>

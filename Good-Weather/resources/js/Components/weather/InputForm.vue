@@ -23,8 +23,8 @@
     </div>
 
 
-    <p v-if="inputError" class="error-message">Please enter a city name.</p>
-    <p v-if="errors.city" class="error-message">{{ errors.city }}</p>
+    <p v-if="inputError" class="   error-message">Please enter a city name.</p>
+    <p v-if="errors.city" class="mt-2 error-message">{{ errors.city }}</p>
 
 
   </form>
@@ -124,5 +124,12 @@ function selectCity(city) {
 .back-up {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
+}
+
+.error-message {
+  color: red;
+  font-weight: 300;
+  font-size: 14px;
+  text-align: center;
 }
 </style>

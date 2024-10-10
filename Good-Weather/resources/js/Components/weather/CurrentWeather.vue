@@ -87,7 +87,7 @@
 
 <script setup>
 import { usePage, router, Link } from "@inertiajs/vue3";
-import { FaHistory, FaRegUser, FaSignInAlt, FaStar } from 'vue3-icons/fa';
+import {FaStar } from 'vue3-icons/fa';
 import axios from "axios";
 import dayjs from 'dayjs';
 

@@ -61,13 +61,15 @@
                         <div class="flex items-center">
 
                             <FaHistory />
-                            <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">Recent Locations
-                            </a>
+                            <span href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">Recent
+                                Locations
+                            </span>
                         </div>
                         <hr>
 
                         <div v-for="(location, index) in history" :key="index">
-                            <span class="history ml-6"> {{ location }}</span>
+                            <span class="history ml-6 cursor-pointer" @click="fetchWeather(location)"> {{ location
+                                }}</span>
 
                             <hr>
                         </div>
@@ -98,20 +100,29 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { FaHistory, FaRegUser, FaSignInAlt } from 'vue3-icons/fa';
+import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     history: Array,
     isAuthenticated: Boolean,
+});
+
+const form = useForm({
+    city: '', // Initialize the city field
 });
 const isMobileNavOpen = ref(false);
 const toggleMobileNav = () => {
     isMobileNavOpen.value = !isMobileNavOpen.value;
 };
 
-
-
+const fetchWeather = (city) => {
+    form.city = city; // Set the city in the form
+    form.post('/city', { city });
+    toggleMobileNav(); // Use the post method from useForm
+        
+};
 
 
 

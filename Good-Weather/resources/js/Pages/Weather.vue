@@ -7,7 +7,7 @@
 
     
     <div class="p-4 " >
-      <InputForm :errors="errors" @update-history="setSearchHistory" />
+      <InputForm :errors="errors" @update-history="setSearchHistory"    />
       <FavouriteCities v-if="isAuthenticated" />
       <CurrentWeather :currentWeather="currentWeather" />
       <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
@@ -43,6 +43,10 @@ const isAuthenticated = pageProps.auth.user !== null;
 const searchHistory = ref([]);
 
 onMounted(() => {
+
+ 
+
+
   if (isAuthenticated) {
     axios.get("/search-history").then((response) => {
       searchHistory.value = response.data;
@@ -53,13 +57,15 @@ onMounted(() => {
       searchHistory.value = JSON.parse(localStorage.getItem("searchHistory"));
     }
   }
+
+  
 });
 
 // Update search history when a new city is searched
 const setSearchHistory = (history) => {
   searchHistory.value = history;
 };
-
+ 
 console.log("current weather: ", props.currentWeather);
 console.log("16 day weather: ", props.sixteenDayForecast);
 </script>

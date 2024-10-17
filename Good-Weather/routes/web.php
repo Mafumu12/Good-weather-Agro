@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchHistoryController;
 use App\Http\Controllers\WeatherController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,11 +19,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/favorites', [FavouritesController::class, 'store']);
     Route::get('/favorites', [FavouritesController::class, 'index']);
+    Route::delete('/favorites/{id}', [FavouritesController::class, 'destroy']);
+
     Route::get('/search-history', [SearchHistoryController::class, 'index']);
     Route::post('/search-history', [SearchHistoryController::class, 'store']);
 });
 
 Route::get('/', function (Request $request) {
+    Log::info('Session Data:', [
+        'currentWeather' => $request->session()->get('currentWeather', 'No data'),
+        'sixteenDayForecast' => $request->session()->get('sixteenDayForecast', 'No data'),
+    ]);
     return Inertia::render('Weather', [
         'currentWeather' => $request->session()->get('currentWeather', []),
         'sixteenDayForecast' => $request->session()->get('sixteenDayForecast', []),

@@ -5,16 +5,16 @@
 
     <NavBar :history="searchHistory" :isAuthenticated="isAuthenticated" />
 
-    
-    <div class="p-4 " >
-      <InputForm :errors="errors" @update-history="setSearchHistory"    />
+
+    <div class="p-4 ">
+      <InputForm :errors="errors" @update-history="setSearchHistory" />
       <FavouriteCities v-if="isAuthenticated" />
       <CurrentWeather :currentWeather="currentWeather" />
       <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
-      
+
     </div>
 
-   
+
 
 
   </div>
@@ -31,7 +31,7 @@ import InputForm from "@/Components/weather/InputForm.vue";
 import NavBar from "@/Components/weather/NavBar.vue";
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { usePage } from "@inertiajs/vue3";
+import { usePage, useForm } from "@inertiajs/vue3";
 const props = defineProps({
   currentWeather: Object,
   sixteenDayForecast: Object,
@@ -42,9 +42,10 @@ const { props: pageProps } = usePage();
 const isAuthenticated = pageProps.auth.user !== null;
 const searchHistory = ref([]);
 
+
 onMounted(() => {
 
- 
+
 
 
   if (isAuthenticated) {
@@ -58,14 +59,16 @@ onMounted(() => {
     }
   }
 
-  
+
+
+
 });
 
 // Update search history when a new city is searched
 const setSearchHistory = (history) => {
   searchHistory.value = history;
 };
- 
+
 console.log("current weather: ", props.currentWeather);
 console.log("16 day weather: ", props.sixteenDayForecast);
 </script>

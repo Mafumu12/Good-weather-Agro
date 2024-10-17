@@ -1,7 +1,8 @@
 <template>
 
 
-  <div class="block  w-full p-4 bg-[#399EF8] mt-4 shadow    rounded-lg  ">
+  <div v-if="currentWeather && currentWeather.data && currentWeather.data.length"
+    class="block  w-full p-4 bg-[#399EF8] mt-4 shadow    rounded-lg  ">
 
 
     <div v-for="current in currentWeather.data" :key="current">
@@ -10,11 +11,11 @@
         <div class=" flex items-center justify-between">
 
           <Link @click="addToFavorites(current.city_name)" class="flex items-center gap-1">
-            <span class="gold-icon">
-              <FaStar />
-            </span>
-            
-            <p class="favourites" >Add To Favourite Cities</p>
+          <span class="gold-icon">
+            <FaStar />
+          </span>
+
+          <p class="favourites">Add To Favourite Cities</p>
 
           </Link>
 
@@ -78,6 +79,12 @@
 
 
   </div>
+  <div v-else class="block  w-full p-4 bg-[#399EF8] mt-4 shadow    rounded-lg  ">
+
+    <p class="welcome">Welcome to The Good Weather App! Stay ahead of the skies with instant weather updates for any
+      city, anywhere in
+      the world!</p>
+  </div>
 
 
 
@@ -87,13 +94,16 @@
 
 <script setup>
 import { usePage, router, Link } from "@inertiajs/vue3";
-import {FaStar } from 'vue3-icons/fa';
+import { FaStar } from 'vue3-icons/fa';
 import axios from "axios";
 import dayjs from 'dayjs';
 
 defineProps({ currentWeather: Object });
 
+
+
 const { props: pageProps } = usePage();
+
 
 function formatDate(dateTime) {
   const date = dayjs(dateTime); // Parse the string into a dayjs object
@@ -122,12 +132,16 @@ function addToFavorites(cityName) {
 
   // If authenticated, proceed with adding to favorites
   axios
-    .post("/favorites", { city: cityName })
+    .post('/favorites', { city: cityName })
     .then((response) => {
-      console.log("City added to favorites:", response.data);
+      console.log("City added to favorites:", response);
+
+
     })
     .catch((error) => {
       console.error("Error adding city to favorites:", error);
+      // Optionally show an error message
+      alert(`Failed to add ${cityName} to favorites.`);
     });
 }
 </script>
@@ -142,7 +156,7 @@ function addToFavorites(cityName) {
 
 .gold-icon {
   color: gold;
-  font-size:12px;
+  font-size: 12px;
 }
 
 .date-time {
@@ -204,6 +218,14 @@ function addToFavorites(cityName) {
   font-weight: 300;
   color: #F5F5F5;
   font-size: 10px;
+
+}
+
+.welcome {
+
+  font-weight: 500;
+  color: #F5F5F5;
+  font-size: 24px;
 
 }
 </style>

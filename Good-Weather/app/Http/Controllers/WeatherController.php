@@ -11,7 +11,7 @@ class WeatherController extends Controller
 
     public function getCurrentWeather(Request $request)
     {
-        $city = $request->input('city', 'Lusaka');
+        $city = $request->input('city');
         Log::info('City requested:', ['city' => $city]);
         $weather = new WeatherService;
         $currenWeather = $weather->currentWeather($city);
@@ -23,7 +23,8 @@ class WeatherController extends Controller
 
             return redirect('/')->withErrors(['city' => 'location not found. Please enter a valid city name ']);
         }
-
+        session()->put('currentWeather', $currenWeather);
+        session()->put('sixteenDayForecast', $forecast);
         return redirect('/')->with([
             'currentWeather' => $currenWeather,
             'sixteenDayForecast' => $forecast,

@@ -1,6 +1,7 @@
 <template>
 
-  <div class="city-country p-4  w-full shadow    bg-[#23262E] mt-4 rounded-lg">
+  <div v-if="sixteenDayForecast && sixteenDayForecast.data && sixteenDayForecast.data.length"
+    class="city-country p-4  w-full shadow    bg-[#23262E] mt-4 rounded-lg">
 
 
     <div class="flex justify-between items-center gap-4 ">
@@ -22,7 +23,7 @@
 
     </div>
 
-    
+
 
 
     <div class=" w-full mt-4 mx-4 overflow-hidden">
@@ -123,7 +124,7 @@ function formatDate(datetime) {
   height: 40px;
 }
 
- 
+
 
 .day {
   font-weight: 400;

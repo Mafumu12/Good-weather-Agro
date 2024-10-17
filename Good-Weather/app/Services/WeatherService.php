@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
+
 class WeatherService
 {
 
     private $baseURL = 'https://api.weatherbit.io/v2.0';
     private $currentWeather = '/current';
     private $sixteenForecast = '/forecast/daily';
-    private $apiKey = 'e90f48e2d246465f9c4856b2bd86acf8';
+    private $apiKey = 'd143a3944976409fae1bac962853567f';
     private $cityurl = '?city=';
     private $key = '&key=';
 
@@ -41,12 +43,18 @@ class WeatherService
 
     public function currentWeather($city)
     {
+
+        $cacheKey = 'current_weather_' . $city;
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey); // Return cached data if available
+        }
         try
         {
             $url = $this->baseURL . $this->currentWeather . $this->cityurl . $city . $this->key . $this->apiKey;
             $currentWeather = $this->sendRequest($url);
-             
+
             $arrayWeather = json_decode($currentWeather);
+            Cache::put($cacheKey, $arrayWeather, now()->addMinutes(10));
             return $arrayWeather;
 
         } catch (\Exception $e) {
@@ -62,13 +70,18 @@ class WeatherService
 
     public function sixteenDayForecast($city)
     {
+
+        $cacheKey = 'sixteen_day_forecast_' . $city;
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey); // Return cached data if available
+        }
         try
         {
             $url = $this->baseURL . $this->sixteenForecast . $this->cityurl . $city . $this->key . $this->apiKey;
             $forecast = $this->sendRequest($url);
 
-         
             $arrayForecast = json_decode($forecast);
+            Cache::put($cacheKey, $arrayForecast, now()->addMinutes(10));
             return $arrayForecast;
 
         } catch (\Exception $e) {

@@ -20,7 +20,7 @@
         </span>
       </button>
 
-      
+
 
     </div>
 
@@ -30,8 +30,8 @@
 
       <div v-for="favorite in chunkedCities[currentSlide]" :key="favorite.id"
         class="flex items-center justify-between w-full text-white bg-[#23262E] font-medium rounded-lg text-sm px-5 py-2.5">
-        {{ favorite.city }}
-        <FaEllipsisV />
+        <span @click="fetchWeather(favorite.city)">{{ favorite.city }}</span>
+        <FaTrash @click="deleteCity(favorite.id)" />
       </div>
     </div>
 
@@ -47,12 +47,23 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
-import { FaEllipsisV, FaLessThan, FaGreaterThan } from 'vue3-icons/fa';
-
+import { usePage, useForm } from "@inertiajs/vue3";
+import { FaEllipsisV, FaLessThan, FaGreaterThan, FaTrash } from 'vue3-icons/fa';
+import axios from 'axios';
 const favorites = ref([]);
 const { props } = usePage();
 const currentSlide = ref(0);
+
+const form = useForm({
+  city: '', // Initialize the city field
+});
+
+const fetchWeather = (city) => {
+  form.city = city; // Set the city in the form
+  form.post('/city', { city });
+
+
+};
 
 // Check if the user is authenticated
 if (props.auth.user) {
@@ -93,6 +104,20 @@ const prevSlide = () => {
     currentSlide.value--;
   }
 };
+
+const deleteCity = (cityId) => {
+  if (confirm("Are you sure you want to delete this city?")) {
+    axios
+      .delete(`/favorites/${cityId}`)
+      .then(() => {
+        // Update the local favorites list after deletion
+        favorites.value = favorites.value.filter(favorite => favorite.id !== cityId);
+      })
+      .catch((error) => {
+        console.error("Error deleting city:", error);
+      });
+  }
+};
 </script>
 
 <style scoped>
@@ -102,9 +127,9 @@ const prevSlide = () => {
   font-size: 16px;
   text-align: center;
 }
-.arrows
-{
-  color:#EBE9EB;
-  font-size:12px ;
+
+.arrows {
+  color: #EBE9EB;
+  font-size: 12px;
 }
 </style>

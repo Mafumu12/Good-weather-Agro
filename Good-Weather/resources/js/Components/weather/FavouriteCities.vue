@@ -53,14 +53,14 @@ import axios from 'axios';
 const favorites = ref([]);
 const { props } = usePage();
 const currentSlide = ref(0);
-
+const emit = defineEmits(["submitCity"]);
 const form = useForm({
   city: '', // Initialize the city field
 });
 
 const fetchWeather = (city) => {
   form.city = city; // Set the city in the form
-  form.post('/city', { city });
+  emit("submitCity", form.city);
 
 
 };

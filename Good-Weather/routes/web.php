@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/search-history', [SearchHistoryController::class, 'index']);
     Route::post('/search-history', [SearchHistoryController::class, 'store']);
+    Route::delete('/historyItem/{itemId}', [SearchHistoryController::class, 'destroy']);
 });
 
 Route::get('/', function (Request $request) {

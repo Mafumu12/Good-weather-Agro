@@ -12,23 +12,26 @@ class WeatherController extends Controller
     public function getCurrentWeather(Request $request)
     {
         $city = $request->input('city');
-        Log::info('City requested:', ['city' => $city]);
+
         $weather = new WeatherService;
-        $currenWeather = $weather->currentWeather($city);
-        Log::info('currentWeather:', ['currenWeather' => $currenWeather]);
+        $currentWeather = $weather->currentWeather($city);
         $forecast = $weather->sixteenDayForecast($city);
-        Log::info('forecast:', ['forecast' => $forecast]);
+        $currentWeatherData = json_decode($currentWeather, true);
+        $forecastData = json_decode($forecast, true);
 
-        if (isset($currenWeather->error)) {
+        Log::info('City requested:', ['city' => $city]);
+        //Log::info('currentWeather:', ['currenWeather' => $currentWeather]);
+        //Log::info('forecast:', ['forecast' => $forecast]);
 
-            return redirect('/')->withErrors(['city' => 'location not found. Please enter a valid city name ']);
+        if (isset($currentWeatherData['error'])) {
+            return response()->json(['error' => $currentWeatherData['error']], 400);
         }
-        session()->put('currentWeather', $currenWeather);
-        session()->put('sixteenDayForecast', $forecast);
-        return redirect('/')->with([
-            'currentWeather' => $currenWeather,
-            'sixteenDayForecast' => $forecast,
-        ]);
+
+        return response()->json([
+            'currentWeather' => $currentWeatherData,
+            'sixteenDayForecast' => $forecastData,
+        ], 200);
+
     }
 
 }

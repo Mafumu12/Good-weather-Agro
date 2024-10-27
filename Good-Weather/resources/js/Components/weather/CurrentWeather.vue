@@ -102,6 +102,7 @@ defineProps({ currentWeather: Object });
 
 
 
+
 const { props: pageProps } = usePage();
 
 
@@ -134,7 +135,11 @@ function addToFavorites(cityName) {
   axios
     .post('/favorites', { city: cityName })
     .then((response) => {
-      console.log("City added to favorites:", response);
+
+      if (response.data.success) {
+        console.log("City added to favorites:", response);
+      }
+
 
 
     })
@@ -144,6 +149,9 @@ function addToFavorites(cityName) {
       alert(`Failed to add ${cityName} to favorites.`);
     });
 }
+
+
+
 </script>
 
 <style scoped>

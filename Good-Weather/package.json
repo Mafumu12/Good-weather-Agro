@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "dayjs": "^1.11.13",
+        "lodash": "^4.17.21",
         "vue3-icons": "^0.1.13"
     }
 }

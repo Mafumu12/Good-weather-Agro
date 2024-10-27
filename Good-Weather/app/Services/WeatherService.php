@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class WeatherService
 {
@@ -46,16 +47,17 @@ class WeatherService
 
         $cacheKey = 'current_weather_' . $city;
         if (Cache::has($cacheKey)) {
+            Log::info("Serving current weather data from cache for city: {$city}");
             return Cache::get($cacheKey); // Return cached data if available
         }
         try
         {
+            Log::info("Fetching current weather data from API for city: {$city}");
             $url = $this->baseURL . $this->currentWeather . $this->cityurl . $city . $this->key . $this->apiKey;
             $currentWeather = $this->sendRequest($url);
 
-            $arrayWeather = json_decode($currentWeather);
-            Cache::put($cacheKey, $arrayWeather, now()->addMinutes(10));
-            return $arrayWeather;
+            Cache::put($cacheKey, $currentWeather, now()->addMinutes(10));
+            return $currentWeather;
 
         } catch (\Exception $e) {
 
@@ -73,16 +75,17 @@ class WeatherService
 
         $cacheKey = 'sixteen_day_forecast_' . $city;
         if (Cache::has($cacheKey)) {
+            Log::info("Serving 16-day forecast data from cache for city: {$city}");
             return Cache::get($cacheKey); // Return cached data if available
         }
         try
         {
+            Log::info("Fetching 16-day forecast data from API for city: {$city}");
             $url = $this->baseURL . $this->sixteenForecast . $this->cityurl . $city . $this->key . $this->apiKey;
             $forecast = $this->sendRequest($url);
 
-            $arrayForecast = json_decode($forecast);
-            Cache::put($cacheKey, $arrayForecast, now()->addMinutes(10));
-            return $arrayForecast;
+            Cache::put($cacheKey, $forecast, now()->addMinutes(10));
+            return $forecast;
 
         } catch (\Exception $e) {
 

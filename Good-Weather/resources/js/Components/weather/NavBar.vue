@@ -67,9 +67,14 @@
                         </div>
                         <hr>
 
-                        <div v-for="(location, index) in history" :key="index">
-                            <span class="history ml-6 cursor-pointer" @click="fetchWeather(location)"> {{ location
-                                }}</span>
+                        <div class="" v-for="(location, index) in history" :key="index">
+
+                            <div class="py-2 flex items-center justify-between ">
+                                <span class="history ml-6 cursor-pointer" @click="fetchWeather(location)"> {{ location
+                                    }}</span>
+                                <FaTrash @click="deleteHistory(location.id)" />
+
+                            </div>
 
                             <hr>
                         </div>
@@ -103,12 +108,13 @@
 import { ref } from 'vue';
 import { FaHistory, FaRegUser, FaSignInAlt } from 'vue3-icons/fa';
 import { useForm } from "@inertiajs/vue3";
+import { FaTrash } from 'vue3-icons/fa';
 
 const props = defineProps({
     history: Array,
     isAuthenticated: Boolean,
 });
-
+const emit = defineEmits(["submitCity"]);
 const form = useForm({
     city: '', // Initialize the city field
 });
@@ -119,10 +125,23 @@ const toggleMobileNav = () => {
 
 const fetchWeather = (city) => {
     form.city = city; // Set the city in the form
-    form.post('/city', { city });
+    emit("submitCity", form.city);
     toggleMobileNav(); // Use the post method from useForm
-        
+
 };
+
+const deleteHistory = (itemId) => {
+    if (props.isAuthenticated) {
+        axios.delete(`/historyItem/${itemId}`).then(() => {
+
+            console.log('successful');
+
+        })
+    }
+    else {
+
+    }
+}
 
 
 

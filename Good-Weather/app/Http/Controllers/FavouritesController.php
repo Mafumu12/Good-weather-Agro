@@ -24,7 +24,8 @@ class FavouritesController extends Controller
                 ->first();
 
             if ($existingFavorite) {
-                return redirect()->back()->with('error', 'City is already in your favorites');
+
+                $existingFavorite->delete();
             }
 
             $favorite = new Favorite();
@@ -32,7 +33,7 @@ class FavouritesController extends Controller
             $favorite->city = $request->input('city');
             $favorite->save();
 
-            return redirect()->back()->with('success', 'City added to favorites');
+            return response()->json(['success' => 'City added to favorites']);
         } catch (Exception $e) {
 
             Log::error('Unexpected error when adding favorite city', [
@@ -41,7 +42,7 @@ class FavouritesController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            return redirect()->back()->with('error', 'An unexpected error occurred. Please try again later.');
+            return response()->json(['error' => 'An unexpected error occurred. Please try again later.'], 500);
 
         }
 

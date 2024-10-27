@@ -1,6 +1,7 @@
 <template>
   <div class="bg-[#31343C] h-screen">
-    <NavBar :history="searchHistory" :isAuthenticated="isAuthenticated" @submitCity="fetchWeatherData" />
+    <NavBar :history="searchHistory" :isAuthenticated="isAuthenticated" @submitCity="fetchWeatherData"
+      @historyDeleted="deleteHistoryItem" />
     <div class="p-4">
       <InputForm :backendError="backendError" @submitCity="fetchWeatherData" />
       <FavouriteCities v-if="isAuthenticated" @submitCity="fetchWeatherData" />
@@ -42,7 +43,12 @@ onMounted(() => {
 });
 
 
-
+const deleteHistoryItem = (itemId) => {
+  searchHistory.value = searchHistory.value.filter(item => item.id !== itemId);
+  if (!isAuthenticated) {
+    searchHistory.value = JSON.parse(localStorage.getItem("searchHistory")) || [];
+  }
+};
 // Fetch weather data and update search history only if successful
 const fetchWeatherData = async (city) => {
   try {
@@ -69,7 +75,10 @@ const fetchWeatherData = async (city) => {
 
 function getSearchHistory() {
   axios.get("/search-history").then((response) => {
+
+
     searchHistory.value = response.data;
+    console.log('history', response.data)
   });
 }
 

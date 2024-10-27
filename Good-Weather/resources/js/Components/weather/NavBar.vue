@@ -67,16 +67,42 @@
                         </div>
                         <hr>
 
-                        <div class="" v-for="(location, index) in history" :key="index">
+                        <div v-if="isAuthenticated">
+                            <div v-for="location in history" :key="location.id">
 
-                            <div class="py-2 flex items-center justify-between ">
-                                <span class="history ml-6 cursor-pointer" @click="fetchWeather(location)"> {{ location
-                                    }}</span>
-                                <FaTrash @click="deleteHistory(location.id)" />
+                                <div class="py-2 flex items-center justify-between ">
+                                    <span class="history ml-6 cursor-pointer" @click="fetchWeather(location)"> {{
+                                        location.city
+                                        }}</span>
+                                    <FaTrash @click="deleteHistory(location.id)" />
 
+                                </div>
+
+                                <hr>
                             </div>
 
-                            <hr>
+                        </div>
+
+
+
+                        <div v-else>
+
+                            <div class="" v-for="(location, index) in history" :key="index">
+
+                                <div class="py-2 flex items-center justify-between ">
+                                    <span class="history ml-6 cursor-pointer" @click="fetchWeather(location)"> {{
+                                        location
+                                    }}</span>
+                                    <FaTrash @click="deleteHistory(location)" />
+
+                                </div>
+
+                                <hr>
+                            </div>
+
+
+
+
                         </div>
                     </li>
 
@@ -114,7 +140,7 @@ const props = defineProps({
     history: Array,
     isAuthenticated: Boolean,
 });
-const emit = defineEmits(["submitCity"]);
+const emit = defineEmits(["submitCity", "historyDeleted"]);
 const form = useForm({
     city: '', // Initialize the city field
 });
@@ -134,11 +160,25 @@ const deleteHistory = (itemId) => {
     if (props.isAuthenticated) {
         axios.delete(`/historyItem/${itemId}`).then(() => {
 
+
+            emit("historyDeleted", itemId);
+
             console.log('successful');
 
         })
     }
     else {
+
+        let localHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
+        if (localHistory.includes(itemId)) {
+            let index = localHistory.indexOf(itemId);
+            localHistory.splice(index, 1);
+
+            localStorage.setItem("searchHistory", JSON.stringify(localHistory));
+
+            emit("historyDeleted", itemId);
+
+        }
 
     }
 }

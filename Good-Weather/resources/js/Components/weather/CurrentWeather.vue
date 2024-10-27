@@ -1,7 +1,7 @@
 <template>
 
 
-  <div v-if="currentWeather && currentWeather.data && currentWeather.data.length"
+  <div v-if="!loading && currentWeather && currentWeather.data && currentWeather.data.length"
     class="block  w-full p-4 bg-[#399EF8] mt-4 shadow    rounded-lg  ">
 
 
@@ -79,7 +79,7 @@
 
 
   </div>
-  <div v-else class="block  w-full p-4 bg-[#399EF8] mt-4 shadow    rounded-lg  ">
+  <div v-else-if="!loading" class="block  w-full p-4 bg-[#399EF8] mt-4 shadow    rounded-lg  ">
 
     <p class="welcome">Welcome to The Good Weather App! Stay ahead of the skies with instant weather updates for any
       city, anywhere in
@@ -98,7 +98,10 @@ import { FaStar } from 'vue3-icons/fa';
 import axios from "axios";
 import dayjs from 'dayjs';
 
-defineProps({ currentWeather: Object });
+defineProps({
+  currentWeather: Object,
+  loading: Boolean
+});
 
 
 

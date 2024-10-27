@@ -5,7 +5,7 @@
     <div class="p-4">
       <InputForm :backendError="backendError" @submitCity="fetchWeatherData" />
       <FavouriteCities v-if="isAuthenticated" @submitCity="fetchWeatherData" />
-      <CurrentWeather :currentWeather="currentWeather" />
+      <CurrentWeather :currentWeather="currentWeather" :loading="loading" />
       <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
     </div>
   </div>
@@ -24,6 +24,7 @@ import { startCase } from "lodash";
 
 const currentWeather = ref(null);
 const sixteenDayForecast = ref(null);
+const loading = ref(false);
 const backendError = ref(null);
 const { props: pageProps } = usePage();
 const isAuthenticated = pageProps.auth.user !== null;
@@ -51,6 +52,8 @@ const deleteHistoryItem = (itemId) => {
 };
 // Fetch weather data and update search history only if successful
 const fetchWeatherData = async (city) => {
+
+  loading.value = true;
   try {
 
 
@@ -69,6 +72,9 @@ const fetchWeatherData = async (city) => {
     if (error.response && error.response.data) {
       backendError.value = error.response.data.error;
     }
+  }
+  finally {
+    loading.value = false; // Set loading to false after the request completes
   }
 };
 

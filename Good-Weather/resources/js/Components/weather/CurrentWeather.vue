@@ -2,15 +2,15 @@
 
 
   <div v-if="!loading && currentWeather && currentWeather.data && currentWeather.data.length"
-    class="block  w-full p-4 bg-[#399EF8] mt-4 shadow    rounded-lg  ">
+    class="block  w-full p-4 bg-[#399EF8] mt-4 shadow    rounded-lg md:mt-8   md:p-6 ">
 
 
     <div v-for="current in currentWeather.data" :key="current">
       <div>
         <p class="city-country">{{ current.city_name }}, <span>{{ current.country_code }}</span></p>
-        <div class=" flex items-center justify-between">
+        <div class=" flex items-center justify-between md:my-2">
 
-          <Link @click="addToFavorites(current.city_name)" class="flex items-center gap-1">
+          <Link @click="addToFavorites(current.city_name)" class="flex items-center gap-1 md: gap-2">
           <span class="gold-icon">
             <FaStar />
           </span>
@@ -31,7 +31,7 @@
       </div>
 
 
-      <div class=" flex justify-start items-center gap-4 my-2">
+      <div class=" flex justify-start items-center gap-4 my-2 md:justify-between md:gap-2">
         <img :src="`https://www.weatherbit.io/static/img/icons/${current.weather.icon}.png`"
           :alt="current.weather.description" class="weather-icon" />
         <span class="current-temperature"> {{ Math.round(current.temp) }}<sup class="super-script">°C</sup></span>
@@ -47,20 +47,20 @@
 
         <div>
           <p class="attributes-heading">wind</p>
-          <p class="values">{{ current.wind_spd }} km/h</p>
+          <p class="values md:my-1">{{ current.wind_spd }} km/h</p>
         </div>
 
         <div>
 
           <p class="attributes-heading">Humidity</p>
-          <p class="values">{{ current.rh }}%</p>
+          <p class="values md:my-1">{{ current.rh }}%</p>
         </div>
 
 
 
         <div>
           <p class="attributes-heading">Air Quality</p>
-          <p class="values">{{ current.aqi }}</p>
+          <p class="values md:my-1">{{ current.aqi }}</p>
 
         </div>
 
@@ -79,7 +79,7 @@
 
 
   </div>
-  <div v-else-if="!loading" class="block  w-full p-4 bg-[#399EF8] mt-4 shadow    rounded-lg  ">
+  <div v-else-if="!loading" class="block  w-full p-4 bg-[#399EF8] mt-8 shadow    rounded-lg md:w-full md:mx-auto  ">
 
     <p class="welcome">Welcome to The Good Weather App! Stay ahead of the skies with instant weather updates for any
       city, anywhere in
@@ -170,16 +170,23 @@ function addToFavorites(cityName) {
   font-size: 12px;
 }
 
-.date-time {
-  font-weight: 600;
+.favourites {
+
+  font-weight: 300;
   color: #F5F5F5;
-  font-size: 12px;
+  font-size: 10px;
+
 }
 
 .current-weather-header {
   font-weight: 500;
   color: #F5F5F5;
   font-size: 12px;
+}
+
+.weather-icon {
+  width: 80px;
+  height: 80px;
 }
 
 .current-temperature {
@@ -207,10 +214,21 @@ function addToFavorites(cityName) {
   font-size: 14px;
 }
 
-.weather-icon {
-  width: 80px;
-  height: 80px;
+
+.date-time {
+  font-weight: 600;
+  color: #F5F5F5;
+  font-size: 12px;
 }
+
+
+
+
+
+
+
+
+
 
 .attributes-heading {
   font-weight: 400;
@@ -224,19 +242,96 @@ function addToFavorites(cityName) {
   font-size: 14px;
 }
 
-.favourites {
 
-  font-weight: 300;
-  color: #F5F5F5;
-  font-size: 10px;
-
-}
 
 .welcome {
 
   font-weight: 500;
   color: #F5F5F5;
   font-size: 24px;
+
+}
+
+@media (min-width: 768px) {
+
+  .city-country {
+
+    font-weight: 700;
+    color: #F5F5F5;
+    font-size: 28px;
+  }
+
+  .gold-icon {
+    color: gold;
+    font-size: 20px;
+  }
+
+  .favourites {
+
+    font-weight: 300;
+    color: #F5F5F5;
+    font-size: 16px;
+
+  }
+
+  .current-weather-header {
+    font-weight: 500;
+    color: #F5F5F5;
+    font-size: 18px;
+  }
+
+
+  .weather-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+
+  .current-temperature {
+    font-weight: 400;
+    color: #F5F5F5;
+    font-size: 88px;
+  }
+
+  .super-script {
+    font-weight: 300;
+    color: #F5F5F5;
+    font-size: 56px;
+  }
+
+  .weather-description {
+    font-weight: 500;
+    color: #F5F5F5;
+    font-size: 22px;
+
+  }
+
+  .feels-like {
+    font-weight: 400;
+    color: #F5F5F5;
+    font-size: 18px;
+  }
+
+  .date-time {
+    font-weight: 600;
+    color: #F5F5F5;
+    font-size: 16px;
+  }
+
+
+  .attributes-heading {
+    font-weight: 400;
+    color: #F5F5F5;
+    font-size: 20px;
+  }
+
+  .values {
+    font-weight: 500;
+    color: #F5F5F5;
+    font-size: 18px;
+  }
+
+
 
 }
 </style>

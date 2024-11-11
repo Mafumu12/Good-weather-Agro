@@ -1,9 +1,58 @@
 <template>
-  <div class="bg-[#31343C] h-screen">
-    <NavBar :history="searchHistory" :isAuthenticated="isAuthenticated" @submitCity="fetchWeatherData"
+  <div class="bg-[#31343C]  min-h-screen h-full">
+    <NavBar class="md:hidden" :history="searchHistory" :isAuthenticated="isAuthenticated" @submitCity="fetchWeatherData"
       @historyDeleted="deleteHistoryItem" />
-    <div class="p-4">
-      <InputForm :backendError="backendError" @submitCity="fetchWeatherData" />
+
+    <nav class="md:bg-white md:border-gray-200   ">
+      <div v-if="isAuthenticated">
+
+        <div class="md:flex md:items-center md:justify-center hidden ">
+          <FaRegUser />
+          <a href="/dashboard" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">Profile</a>
+
+        </div>
+
+
+      </div>
+
+
+      <div v-else>
+
+        <div class="md:flex md:items-center md:justify-center hidden ">
+
+          <FaSignInAlt />
+          <a href="/login" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">SignIn</a>
+          <span>/</span>
+          <a href="/register" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100">SignUp</a>
+        </div>
+
+
+
+      </div>
+
+
+
+
+
+    </nav>
+
+    <div class="p-4 md:mx-auto md:w-10/12 md:p-4 md:my-8  lg:my-12">
+
+
+      <div class="md:flex md:items-center md:justify-between md:mx-auto ">
+
+        <InputForm :backendError="backendError" @submitCity="fetchWeatherData" />
+        <div class="hidden md:block">
+          <SearchHistory :history="searchHistory" :isAuthenticated="isAuthenticated" @submitCity="fetchWeatherData"
+            @historyDeleted="deleteHistoryItem" />
+
+        </div>
+
+
+      </div>
+
+
+
       <FavouriteCities v-if="isAuthenticated" @submitCity="fetchWeatherData" />
       <CurrentWeather :currentWeather="currentWeather" :loading="loading" />
       <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
@@ -12,10 +61,12 @@
 </template>
 
 <script setup>
+import { FaHistory, FaRegUser, FaSignInAlt } from 'vue3-icons/fa';
 import CurrentWeather from "@/Components/weather/CurrentWeather.vue";
 import TwelveDayWeather from "@/Components/weather/TwelveDayWeather.vue";
 import FavouriteCities from "@/Components/weather/FavouriteCities.vue";
 import InputForm from "@/Components/weather/InputForm.vue";
+import SearchHistory from "@/Components/weather/SearchHistory.vue";
 import NavBar from "@/Components/weather/NavBar.vue";
 import { usePage } from "@inertiajs/vue3";
 import { ref, onMounted } from "vue";

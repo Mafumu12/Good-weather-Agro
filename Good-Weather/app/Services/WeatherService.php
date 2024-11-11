@@ -11,7 +11,7 @@ class WeatherService
     private $baseURL = 'https://api.weatherbit.io/v2.0';
     private $currentWeather = '/current';
     private $sixteenForecast = '/forecast/daily';
-    private $apiKey = 'd143a3944976409fae1bac962853567f';
+    private $apiKey = '049d7b18beda41daa33c03c0e716328a';
     private $cityurl = '?city=';
     private $key = '&key=';
 

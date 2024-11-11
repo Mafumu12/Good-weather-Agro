@@ -1,7 +1,7 @@
 <template>
 
   <div v-if="sixteenDayForecast && sixteenDayForecast.data && sixteenDayForecast.data.length"
-    class="city-country p-4  w-full shadow    bg-[#23262E] mt-4 rounded-lg">
+    class="city-country p-4  w-full shadow    bg-[#23262E] my-4 rounded-lg md:my-8  md:p-6">
 
 
     <div class="flex justify-between items-center gap-4 ">
@@ -12,7 +12,7 @@
           <FaLessThan />
         </span>
       </button>
-      <p class="forecast-heading">16 Day Forecast</p>
+      <p class="forecast-heading">The Next Seven Days</p>
       <button type="button"
         class="  flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
         @click="nextSlide">
@@ -26,32 +26,33 @@
 
 
 
-    <div class=" w-full mt-4 mx-4 overflow-hidden">
+    <div class=" w-full  mt-4     md:mt-10">
 
 
 
       <div v-for="(chunk, index) in chunkedForecasts" :key="index" v-show="currentSlide === index"
-        class="grid grid-cols-4 gap-4 ">
+        :class="{ 'grid-cols-3 gap-4 justify-items-center': chunkedForecasts[currentSlide].length === 3, 'grid-cols-4 gap-4 justify-items-center': chunkedForecasts[currentSlide].length === 4 }"
+        class="grid   ">
         <div v-for="forecast in chunk" :key="forecast.datetime" class="forecast-item">
-          <div class="day">{{ formatDate(forecast.datetime) }}</div>
+          <div class="day justify-self-center">{{ formatDate(forecast.datetime) }}</div>
 
           <div>
             <img :src="`https://www.weatherbit.io/static/img/icons/${forecast.weather.icon}.png`"
-              :alt="forecast.weather.description" class="weather-icon" />
+              :alt="forecast.weather.description" class="weather-icon justify-self-center md:my-4" />
 
           </div>
           <div>
 
-            <p class="descrip  ">{{ forecast.weather.description }}</p>
+            <p class="descrip justify-self-center md:my-4">{{ forecast.weather.description }}</p>
           </div>
           <div>
-            <p class="max-temp">{{ Math.round(forecast.max_temp) }}°C</p>
+            <p class="max-temp justify-self-center md:my-2">{{ Math.round(forecast.max_temp) }}°C</p>
           </div>
           <div>
-            <p class="min-temp">{{ Math.round(forecast.min_temp) }}°C</p>
+            <p class="min-temp justify-self-center md:my-2">{{ Math.round(forecast.min_temp) }}°C</p>
           </div>
           <div>
-            <p class="wind">{{ Math.round(forecast.wind_spd) }}m/s</p>
+            <p class="wind justify-self-center md:my-2">{{ Math.round(forecast.wind_spd) }}m/s</p>
           </div>
         </div>
       </div>
@@ -119,13 +120,6 @@ function formatDate(datetime) {
   font-size: 12px;
 }
 
-.weather-icon {
-  width: 40px;
-  height: 40px;
-}
-
-
-
 .day {
   font-weight: 400;
   font-size: 14px;
@@ -133,10 +127,21 @@ function formatDate(datetime) {
 
 }
 
+
+.weather-icon {
+  width: 40px;
+  height: 40px;
+}
+
+
+
+
+
 .descrip {
   font-weight: 700;
   color: #F5F5F5;
   font-size: 12px;
+
 
 
 }
@@ -160,6 +165,60 @@ function formatDate(datetime) {
   font-weight: 400;
   color: #F5F5F5;
   font-size: 12px;
+
+}
+
+
+@media(min-width: 768px) {
+
+  .forecast-heading {
+    font-weight: 500;
+    color: #F5F5F5;
+    font-size: 28px;
+  }
+
+  .day {
+    font-weight: 400;
+    font-size: 20px;
+    color: #F5F5F5;
+
+  }
+
+  .weather-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .descrip {
+    font-weight: 700;
+    color: #F5F5F5;
+    font-size: 16px;
+
+
+
+  }
+
+  .max-temp {
+    font-weight: 700;
+    color: #F5F5F5;
+    font-size: 16px;
+  }
+
+  .min-temp {
+
+    font-weight: 600;
+    color: #F5F5F5;
+    font-size: 16px;
+
+  }
+
+  .wind {
+
+    font-weight: 400;
+    color: #F5F5F5;
+    font-size: 16px;
+
+  }
 
 }
 </style>

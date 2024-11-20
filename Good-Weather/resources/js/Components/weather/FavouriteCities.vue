@@ -31,7 +31,7 @@
 
       <div v-for="favorite in chunkedCities[currentSlide]" :key="favorite.id" :class="{
         'justify-between mx-auto w-1/2 lg:w-1/5': chunkedCities[currentSlide].length === 1,
-        'justify-between w-full lg:w-3/4 lg:mx-auto': chunkedCities[currentSlide].length > 1
+        'justify-between w-full lg:w-full lg:mx-auto': chunkedCities[currentSlide].length > 1
       }" class="flex items-center  text-white bg-[#23262E] font-medium rounded-lg text-sm px-5 py-2.5">
         <span @click="fetchWeather(favorite.city)">{{ favorite.city }}</span>
         <FaTrash @click="deleteCity(favorite.id)" />

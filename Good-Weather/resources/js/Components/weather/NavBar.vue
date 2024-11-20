@@ -71,9 +71,9 @@
                             <div v-for="location in history" :key="location.id">
 
                                 <div class="py-2 flex items-center justify-between ">
-                                    <span class="history ml-6 cursor-pointer" @click="fetchWeather(location)"> {{
+                                    <span class="history ml-6 cursor-pointer" @click="fetchWeather(location.city)"> {{
                                         location.city
-                                        }}</span>
+                                    }}</span>
                                     <FaTrash @click="deleteHistory(location.id)" />
 
                                 </div>
@@ -92,7 +92,7 @@
                                 <div class="py-2 flex items-center justify-between ">
                                     <span class="history ml-6 cursor-pointer" @click="fetchWeather(location)"> {{
                                         location
-                                    }}</span>
+                                        }}</span>
                                     <FaTrash @click="deleteHistory(location)" />
 
                                 </div>

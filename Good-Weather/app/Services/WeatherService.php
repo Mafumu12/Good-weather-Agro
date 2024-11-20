@@ -44,7 +44,7 @@ class WeatherService
 
     public function currentWeather($city)
     {
-
+        Log::info(" city searched:", ["city" => $city]);
         $cacheKey = 'current_weather_' . $city;
         if (Cache::has($cacheKey)) {
             Log::info("Serving current weather data from cache for city: {$city}");

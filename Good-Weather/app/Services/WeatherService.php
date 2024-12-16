@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Log;
 class WeatherService
 {
 
-    private $baseURL = 'https://api.weatherbit.io/v2.0';
-    private $currentWeather = '/current';
-    private $sixteenForecast = '/forecast/daily';
+    private const BASE_URL = 'https://api.weatherbit.io/v2.0';
+    private const CURRENT_WEATHER_PATH = '/current';
+    private const FORECAST_PATH = '/forecast/daily';
+    private const CACHE_EXPIRATION_MINUTES = 10;
     private $apiKey;
     private $cityurl = '?city=';
     private $key = '&key=';
@@ -18,6 +19,11 @@ class WeatherService
     public function __construct()
     {
         $this->apiKey = config('services.weather.api_key');
+    }
+
+    private function buildUrl($path, $city)
+    {
+        return self::BASE_URL . $path . '?city=' . urlencode($city) . '&key=' . $this->apiKey;
     }
 
     private function sendRequest($url)
@@ -49,7 +55,7 @@ class WeatherService
 
     public function currentWeather($city)
     {
-        Log::info(" city searched:", ["city" => $city]);
+
         $cacheKey = 'current_weather_' . $city;
         if (Cache::has($cacheKey)) {
             Log::info("Serving current weather data from cache for city: {$city}");
@@ -58,10 +64,10 @@ class WeatherService
         try
         {
             Log::info("Fetching current weather data from API for city: {$city}");
-            $url = $this->baseURL . $this->currentWeather . $this->cityurl . $city . $this->key . $this->apiKey;
+            $url = $this->buildUrl(self::CURRENT_WEATHER_PATH, $city);
             $currentWeather = $this->sendRequest($url);
 
-            Cache::put($cacheKey, $currentWeather, now()->addMinutes(10));
+            Cache::put($cacheKey, $currentWeather, now()->addMinutes(self::CACHE_EXPIRATION_MINUTES));
             return $currentWeather;
 
         } catch (\Exception $e) {
@@ -86,10 +92,10 @@ class WeatherService
         try
         {
             Log::info("Fetching 16-day forecast data from API for city: {$city}");
-            $url = $this->baseURL . $this->sixteenForecast . $this->cityurl . $city . $this->key . $this->apiKey;
+            $url = $this->buildUrl(self::FORECAST_PATH, $city);
             $forecast = $this->sendRequest($url);
 
-            Cache::put($cacheKey, $forecast, now()->addMinutes(10));
+            Cache::put($cacheKey, $forecast, now()->addMinutes(self::CACHE_EXPIRATION_MINUTES));
             return $forecast;
 
         } catch (\Exception $e) {

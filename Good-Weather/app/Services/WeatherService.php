@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class WeatherService
@@ -13,8 +14,6 @@ class WeatherService
     private const FORECAST_PATH = '/forecast/daily';
     private const CACHE_EXPIRATION_MINUTES = 10;
     private $apiKey;
-    private $cityurl = '?city=';
-    private $key = '&key=';
 
     public function __construct()
     {
@@ -29,17 +28,13 @@ class WeatherService
     private function sendRequest($url)
     {
         try {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            $response = curl_exec($ch);
 
-            if (curl_errno($ch)) {
+            $response = Http::get($url);
 
-                throw new \Exception('cURL error: ' . curl_error($ch));
+            if ($response->failed()) {
+
+                throw new \Exception('API request failed with status ' . $response->status());
             }
-            curl_close($ch);
 
             return $response;
 

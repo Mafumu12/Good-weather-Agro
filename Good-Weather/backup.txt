@@ -1,0 +1,149 @@
+<?php
+
+namespace App\Services;
+
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
+class WeatherService
+{
+
+    private const BASE_URL = 'https://api.weatherbit.io/v2.0';
+    private const CURRENT_WEATHER_PATH = '/current';
+    private const FORECAST_PATH = '/forecast/daily';
+    private const CACHE_EXPIRATION_MINUTES = 10;
+    private string $apiKey;
+
+    public function __construct()
+    {
+        $this->apiKey = config('services.weather.api_key');
+    }
+
+    private function buildUrl($path, $city)
+    {
+        return self::BASE_URL . $path . '?city=' . urlencode($city) . '&key=' . $this->apiKey;
+    }
+
+    private function sendRequest($url)
+    {
+        try {
+            $response = Http::get($url);
+
+            if ($response->failed()) {
+                throw new \Exception('API request failed with status ' . $response->status());
+            }
+
+            return $response->json();
+        } catch (\Exception $e) {
+            Log::error('Error while sending request: ' . $e->getMessage());
+
+            return null;
+        }
+
+    }
+
+    public function currentWeather($city)
+    {
+
+        $cacheKey = 'current_weather_' . $city;
+
+        if (Cache::has($cacheKey)) {
+
+            Log::info("Serving current weather data from cache for city: {$city}");
+            return Cache::get($cacheKey);
+
+        }
+
+        Log::info("Fetching current weather data from API for city: {$city}");
+        $url = $this->buildUrl(self::CURRENT_WEATHER_PATH, $city);
+
+        try {
+            $currentWeather = $this->sendRequest($url);
+            Cache::put($cacheKey, $currentWeather, now()->addMinutes(self::CACHE_EXPIRATION_MINUTES));
+
+            return $currentWeather;
+        } catch (\Exception $e) {
+
+            Log::error("Failed to fetch current weather data for city: {$city}. Error: {$e->getMessage()}");
+            return null;
+        }
+
+    }
+
+    public function sixteenDayForecast($city)
+    {
+
+        $cacheKey = 'sixteen_day_forecast_' . $city;
+
+        if (Cache::has($cacheKey)) {
+            Log::info("Serving 16-day forecast data from cache for city: {$city}");
+            return Cache::get($cacheKey);
+        }
+
+        Log::info("Fetching 16-day forecast data from API for city: {$city}");
+        $url = $this->buildUrl(self::FORECAST_PATH, $city);
+
+        try {
+
+            $forecast = $this->sendRequest($url);
+
+            Cache::put($cacheKey, $forecast, now()->addMinutes(self::CACHE_EXPIRATION_MINUTES));
+            return $forecast;
+
+        } catch (\Exception $e) {
+
+            Log::error("Failed to fetch current weather data for city: {$city}. Error: {$e->getMessage()}");
+            return null;
+        }
+
+    }
+}
+
+
+
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\WeatherService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+class WeatherController extends Controller
+{
+
+    private WeatherService $weatherService;
+
+    public function __construct(WeatherService $weatherService)
+    {
+        $this->weatherService = $weatherService;
+    }
+
+    public function getCurrentWeather(Request $request)
+    {
+
+        $request->validate([
+            'city' => 'required|string|max:100',
+        ]);
+        $city = $request->input('city');
+
+        $currentWeatherData = $this->weatherService->currentWeather($city);
+        $forecastData = $this->weatherService->sixteenDayForecast($city);
+
+        Log::info('City requested:', ['city' => $city]);
+        //Log::info('currentWeather:', ['currenWeather' => $currentWeather]);
+        //Log::info('forecast:', ['forecast' => $forecast]);
+
+        if (isset($currentWeatherData['error'])) {
+            return response()->json(['error' => $currentWeatherData['error']], 400);
+        }
+
+        return response()->json([
+            'currentWeather' => $currentWeatherData,
+            'sixteenDayForecast' => $forecastData,
+        ], 200);
+
+    }
+
+}

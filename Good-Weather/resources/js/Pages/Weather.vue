@@ -55,7 +55,7 @@
 
       <FavouriteCities v-if="isAuthenticated" @submitCity="fetchWeatherData" />
       <CurrentWeather :currentWeather="currentWeather" :loading="loading" />
-      <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" />
+      <TwelveDayWeather :sixteenDayForecast="sixteenDayForecast" :loading="loading" />
     </div>
   </div>
 </template>

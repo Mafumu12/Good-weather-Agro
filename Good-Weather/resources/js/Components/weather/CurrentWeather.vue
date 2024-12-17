@@ -15,7 +15,7 @@
             <FaStar />
           </span>
 
-          <p class="favourites">Add To Favourite Cities</p>
+          <p class="favourites ">Add To Favourite Cities</p>
 
           </Link>
 

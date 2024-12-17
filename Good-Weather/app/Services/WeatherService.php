@@ -3,16 +3,15 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class WeatherService
 {
-
     private const BASE_URL = 'https://api.weatherbit.io/v2.0';
     private const CURRENT_WEATHER_PATH = '/current';
     private const FORECAST_PATH = '/forecast/daily';
     private const CACHE_EXPIRATION_MINUTES = 10;
+
     private $apiKey;
 
     public function __construct()
@@ -28,79 +27,71 @@ class WeatherService
     private function sendRequest($url)
     {
         try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            $response = curl_exec($ch);
 
-            $response = Http::get($url);
+            if (curl_errno($ch)) {
+                throw new \Exception('cURL error: ' . curl_error($ch));
+            }
+            curl_close($ch);
 
-            if ($response->failed()) {
-
-                throw new \Exception('API request failed with status ' . $response->status());
+            $decodedResponse = json_decode($response, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('Invalid JSON response from API');
             }
 
-            return $response;
+            if (isset($decodedResponse['error'])) {
+                throw new \Exception($decodedResponse['error']);
+            }
+
+            return $decodedResponse;
 
         } catch (\Exception $e) {
-            $error = json_encode(['status' => 'error',
-                'message' => 'Error occurred while sending the request: ' . $e->getMessage(),
+            Log::error('Error occurred while sending the request', [
+                'url' => $url,
+                'message' => $e->getMessage(),
             ]);
 
-            return $error;
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
+
+    private function fetchFromCacheOrApi($cacheKey, $url)
+    {
+        if (Cache::has($cacheKey)) {
+            Log::info("Serving data from cache", ['cacheKey' => $cacheKey]);
+            return json_decode(Cache::get($cacheKey), true);
         }
 
+        Log::info("Fetching data from API", ['url' => $url]);
+        $data = $this->sendRequest($url);
+
+        if (!isset($data['status']) || $data['status'] !== 'error') {
+            Cache::put($cacheKey, json_encode($data), now()->addMinutes(self::CACHE_EXPIRATION_MINUTES));
+        }
+
+        return $data;
     }
 
     public function currentWeather($city)
     {
-
+        $url = $this->buildUrl(self::CURRENT_WEATHER_PATH, $city);
         $cacheKey = 'current_weather_' . $city;
-        if (Cache::has($cacheKey)) {
-            Log::info("Serving current weather data from cache for city: {$city}");
-            return Cache::get($cacheKey); // Return cached data if available
-        }
-        try
-        {
-            Log::info("Fetching current weather data from API for city: {$city}");
-            $url = $this->buildUrl(self::CURRENT_WEATHER_PATH, $city);
-            $currentWeather = $this->sendRequest($url);
 
-            Cache::put($cacheKey, $currentWeather, now()->addMinutes(self::CACHE_EXPIRATION_MINUTES));
-            return $currentWeather;
-
-        } catch (\Exception $e) {
-
-            $error = json_encode(['status' => 'error',
-                'message' => 'Error occurred while getting current weather: ' . $e->getMessage(),
-            ]);
-
-            return $error;
-
-        }
+        return $this->fetchFromCacheOrApi($cacheKey, $url);
     }
 
     public function sixteenDayForecast($city)
     {
-
+        $url = $this->buildUrl(self::FORECAST_PATH, $city);
         $cacheKey = 'sixteen_day_forecast_' . $city;
-        if (Cache::has($cacheKey)) {
-            Log::info("Serving 16-day forecast data from cache for city: {$city}");
-            return Cache::get($cacheKey); // Return cached data if available
-        }
-        try
-        {
-            Log::info("Fetching 16-day forecast data from API for city: {$city}");
-            $url = $this->buildUrl(self::FORECAST_PATH, $city);
-            $forecast = $this->sendRequest($url);
 
-            Cache::put($cacheKey, $forecast, now()->addMinutes(self::CACHE_EXPIRATION_MINUTES));
-            return $forecast;
-
-        } catch (\Exception $e) {
-
-            $error = json_encode(['status' => 'error',
-                'message' => 'Error occurred while getting forecast for the next 16 days : ' . $e->getMessage(),
-            ]);
-
-            return $error;
-
-        }
+        return $this->fetchFromCacheOrApi($cacheKey, $url);
     }
 }

@@ -8,30 +8,45 @@ use Illuminate\Support\Facades\Log;
 
 class WeatherController extends Controller
 {
+    private WeatherService $weatherService;
+
+    public function __construct(WeatherService $weatherService)
+    {
+        $this->weatherService = $weatherService;
+    }
 
     public function getCurrentWeather(Request $request)
     {
-        $city = $request->input('city');
+        // Validate that the city field is required and is a string
+        $validated = $request->validate([
+            'city' => 'required|string',
+        ], [
+            'city.required' => 'City is required.',
+            'city.string' => 'City must be a valid string.',
+        ]);
 
-        $weather = new WeatherService;
-        $currentWeather = $weather->currentWeather($city);
-        $forecast = $weather->sixteenDayForecast($city);
-        $currentWeatherData = json_decode($currentWeather, true);
-        $forecastData = json_decode($forecast, true);
+        // Get the validated city name
+        $city = $validated['city'];
 
-        Log::info('City requested:', ['city' => $city]);
-        //Log::info('currentWeather:', ['currenWeather' => $currentWeather]);
-        //Log::info('forecast:', ['forecast' => $forecast]);
+        $currentWeather = $this->weatherService->currentWeather($city);
+        $forecast = $this->weatherService->sixteenDayForecast($city);
 
-        if (isset($currentWeatherData['error'])) {
-            return response()->json(['error' => $currentWeatherData['error']], 400);
+        if (isset($currentWeather['status']) && $currentWeather['status'] === 'error') {
+            return response()->json(['error' => $currentWeather['message']], 400);
+        }
+
+        if (isset($forecast['status']) && $forecast['status'] === 'error') {
+            Log::warning('Forecast data unavailable', [
+                'city' => $city,
+                'error' => $forecast['message'],
+            ]);
+
+            $forecast = ['message' => 'Forecast data is currently unavailable.'];
         }
 
         return response()->json([
-            'currentWeather' => $currentWeatherData,
-            'sixteenDayForecast' => $forecastData,
+            'currentWeather' => $currentWeather,
+            'sixteenDayForecast' => $forecast,
         ], 200);
-
     }
-
 }

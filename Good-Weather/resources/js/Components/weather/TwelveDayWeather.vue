@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="sixteenDayForecast && sixteenDayForecast.data && sixteenDayForecast.data.length"
+  <div v-if="!loading && sixteenDayForecast && sixteenDayForecast.data && sixteenDayForecast.data.length"
     class="city-country p-4  w-full shadow    bg-[#23262E] my-4 rounded-lg md:my-8  md:p-6">
 
 
@@ -12,7 +12,7 @@
           <FaLessThan />
         </span>
       </button>
-      <p class="forecast-heading">The Next Seven Days</p>
+      <p class="forecast-heading">The Next Sixteen Days</p>
       <button type="button"
         class="  flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
         @click="nextSlide">
@@ -64,13 +64,15 @@
 
 
   </div>
+
+
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import { FaGreaterThan, FaLessThan } from 'vue3-icons/fa';
 
-const props = defineProps({ sixteenDayForecast: Object });
+const props = defineProps({ sixteenDayForecast: Object, loading: Boolean });
 const currentSlide = ref(0);
 
 // Divide forecasts into chunks of 4
